@@ -1,67 +1,65 @@
 ---
 name: obsidian-knowledge-organizer
-description: OpenClaw 和 Codex 可用的 Obsidian 知识整理 skill。用于存入知识库、整理文章、打标签、归档、生成摘要和推荐相关文章。
+description: An OpenClaw- and Codex-compatible Obsidian knowledge organization skill for importing articles, organizing notes, applying tags, archiving content, generating summaries, and suggesting related notes.
 ---
 
 # Knowledge Organizer
 
-English: This skill helps OpenClaw turn article links, drafts, and notes into structured Obsidian-ready markdown with duplicate checks, tags, summaries, related-note suggestions, and image downloads.
+This skill turns article links, drafts, and notes into structured Obsidian-ready Markdown with duplicate checks, tags, summaries, related-note suggestions, and image downloads.
 
-Obsidian 原生知识整理能力，面向 vault 工作流，将文章、链接和草稿整理成结构化、标签化且可直接落盘、Obsidian 原生可发布的 Markdown 笔记。
+## Use Cases
 
-## 适用场景
+- Store content in a knowledge base
+- Organize articles
+- Apply tags
+- Archive notes
+- Generate summaries
+- Suggest related notes
 
-- 存入知识库
-- 整理文章
-- 打标签
-- 归档
-- 生成摘要
-- 推荐相关文章
+## Capabilities
 
-## 能力概览
+- Generate Obsidian-ready notes with YAML frontmatter, wikilinks, embeds, and block IDs
+- If `draft.images` is present, download images into `assets/` and keep relative references in the note body
+- Run duplicate detection before writing, covering URL, hash, alias, and similarity checks
+- Treat duplicate hits as normal control flow; the CLI returns a structured decision result
+- Recommend directly linkable related notes
+- Validate tags against the knowledge-base tag contract
 
-- 生成可直接写入 Obsidian 的笔记，包含 YAML frontmatter、wikilinks、embeds 和 block IDs
-- 如果 draft 提供 `images`，自动下载图片到 `assets/` 并在正文里用相对路径引用，避免图片信息丢失
-- 在写入前执行重复检测，覆盖 URL、hash、alias 和相似度层
-- 去重命中是正常控制流结果，不应被当作工具错误；CLI 以结构化决策结果（decision）返回
-- 推荐可直接链接的相关文章
-- 按知识库标签契约校验标签（tags）
+## Workflow
 
-## 工作流
+1. Get content: use a browser for public-account links, prefer `xiaohongshu-mcp` for Xiaohongshu links, use `web_fetch` for other web pages, and process user-provided content directly
+2. Check duplicates: prompt the user when a duplicate is found, then wait for overwrite, merge, or skip
+3. Render the note: `scripts/obsidian_note.py` generates the content and destination path
+4. Write to the vault: runtime writes directly to `destination_path` without a second Markdown pass
 
-1. 获取内容：公众号链接用浏览器，小红书链接优先用 `xiaohongshu-mcp`，其它网页链接用 `web_fetch`，用户直给内容直接处理
-2. 去重检测：发现重复时提示用户，等待覆盖、合并或跳过
-3. 渲染笔记：`scripts/obsidian_note.py` 生成内容和目标路径
-4. 写入 vault：runtime 按 `destination_path` 直接落盘，不再二次处理 Markdown
+## Contract
 
-## 合同
+- Input: structured draft, title aliases, source metadata, summary, bullets, excerpts, images, related notes, and vault root
+- Output: `RenderedNote(content, destination_path)`
+- Frontmatter must include `title`, `aliases`, `tags`, `source_type`, `source_url`, `published`, `created`, `updated`, `importance`, `status`, and `canonical_hash`
+- Before writing tags, require at least 1 domain tag and 1 type tag, with a total of 5-10 tags
+- Vault root must be a non-empty absolute path
+- Vault root should come from `OPENCLAW_KB_ROOT` when available
+- This contract covers frontmatter / wikilink / embed / block id rules
 
-- 输入：结构化 draft、标题别名、来源元数据、摘要、要点、摘录、图片、相关文章、vault root
-- 输出：`RenderedNote(content, destination_path)`
-- frontmatter 必须包含：`title`、`aliases`、`tags`、`source_type`、`source_url`、`published`、`created`、`updated`、`importance`、`status`、`canonical_hash`
-- 标签写入前必须满足：至少 1 个领域标签 + 1 个类型标签，总数 5-10 个
-- vault root 必须是 non-empty absolute path
-- vault root 优先来自 `OPENCLAW_KB_ROOT`
-- 覆盖 frontmatter / wikilink / embed / block id 规则
-
-## 兼容性
+## Compatibility
 
 - OpenClaw 兼容
 - Codex 兼容
 - Obsidian vault 工作流
 
-## 项目链接
+## Project Links
 
-- GitHub 仓库：<https://github.com/cjke84/obsidian-knowledge-organizer>
+- GitHub repository: <https://github.com/cjke84/obsidian-knowledge-organizer>
 
-## 输出模板
+## Output Template
 
 ```text
-✅ 已存入知识库
+✅ Stored in knowledge base
 
-📁 位置：知识库/xxx.md
-🏷️ 标签：tag1, tag2, tag3
-📋 摘要：一句话总结
-⭐ 重要性：core
-🔗 相关文章：xxx, yyy
+📁 Location: knowledge-base/xxx.md
+🏷️ Tags: tag1, tag2, tag3
+📋 Summary: one-sentence summary
+⭐ Importance: core
+🔗 Related notes: xxx, yyy
 ```

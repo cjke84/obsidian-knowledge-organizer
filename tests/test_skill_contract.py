@@ -9,7 +9,7 @@ def test_skill_contract_mentions_obsidian_frontmatter_wikilinks_and_embeds():
     tag_text = (repo_root / "references" / "tag-system.md").read_text(encoding="utf-8")
 
     required_skill_phrases = [
-        "Obsidian 原生可发布",
+        "structured Obsidian-ready Markdown",
         "YAML frontmatter",
         "wikilink",
         "embed",
@@ -17,7 +17,7 @@ def test_skill_contract_mentions_obsidian_frontmatter_wikilinks_and_embeds():
         "OPENCLAW_KB_ROOT",
         "absolute path",
         "frontmatter / wikilink / embed / block id",
-        "小红书链接优先用 `xiaohongshu-mcp`",
+        "prefer `xiaohongshu-mcp` for Xiaohongshu links",
     ]
     required_tag_phrases = [
         "至少 1 个领域标签 + 1 个类型标签",
