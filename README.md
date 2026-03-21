@@ -5,7 +5,8 @@
 
 Obsidian-native knowledge organizer for vault workflows. / 面向 Obsidian 知识库工作流的原生整理工具。
 
-OpenClaw-compatible skill. / 可直接在 OpenClaw 中使用的 skill。
+OpenClaw-compatible skill. / 可直接在 OpenClaw 中使用的 skill.
+Codex-compatible skill. / 可直接在 Codex 中使用的 skill.
 
 ## Capabilities / 核心能力
 
