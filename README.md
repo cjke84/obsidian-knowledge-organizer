@@ -26,3 +26,29 @@ Run the full suite:
 ```bash
 pytest -q
 ```
+
+## Usage Examples / 使用示例
+
+Check whether a draft duplicates an existing note:
+
+```bash
+python scripts/check_duplicate.py "New Title" --content "$(cat draft.md)" --json
+```
+
+Find related notes for a new article:
+
+```bash
+python scripts/find_related.py alpha beta --title "New Title" --json
+```
+
+检测草稿是否与现有笔记重复：
+
+```bash
+python scripts/check_duplicate.py "新标题" --content "$(cat draft.md)" --json
+```
+
+为新文章查找相关文章：
+
+```bash
+python scripts/find_related.py alpha beta --title "新标题" --json
+```
