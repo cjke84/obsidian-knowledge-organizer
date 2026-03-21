@@ -1,6 +1,6 @@
-# knowledge-organizer
+# obsidian-knowledge-organizer
 
-Obsidian-native knowledge organizer skill extracted into a standalone repository for future GitHub upload.
+Obsidian-native knowledge organizer extracted into a standalone repository for future GitHub upload.
 
 ## Contents
 - `SKILL.md`: skill contract and workflow
