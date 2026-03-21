@@ -10,7 +10,7 @@
 - 提取文章内容
 - 检查是否重复并返回结构化决策结果（decision）
 - 生成标签、摘要和元数据
-- 自动下载图片到 `assets/` 并保留可读引用
+- 自动下载图片到 `assets/` 并保留可读引用，支持 `src` / `data_src` / `data-original` / `data-lazy-src` / `srcset` / `url` / `image_url` / `original` 等常见字段
 - 支持公众号文章、小红书链接和普通网页
 - 输出可直接写入 Obsidian 的笔记
 
@@ -29,6 +29,20 @@
 - 归档
 - 生成摘要
 - 推荐相关文章
+
+## `draft.images` 示例
+
+```yaml
+images:
+  - path: /absolute/path/to/local.png
+    alt: 本地图片
+  - src: https://example.com/cover.png
+    alt: 远程图片
+  - srcset: https://example.com/cover-1x.png 1x, https://example.com/cover-2x.png 2x
+    alt: 响应式图片
+```
+
+`path` 用于本地文件，`src` / `data_src` / `data-original` / `data-lazy-src` / `original` 等用于远程图片；`srcset` 会优先选数值更高的候选。
 
 ## 快速使用
 

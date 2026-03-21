@@ -10,6 +10,7 @@ from typing import Any, Iterable
 
 import yaml
 
+from .image_fields import resolve_image_targets
 from .image_assets import render_image_markdown
 
 FRONTMATTER_BOUNDARY = "---"
@@ -66,15 +67,7 @@ def _render_image_reference(image: Any) -> str | None:
     if not isinstance(image, Mapping):
         return None
 
-    local_target = _normalize_image_target(
-        image.get("path")
-        or image.get("local_path")
-        or image.get("file")
-        or image.get("target")
-    )
-    remote_target = _normalize_image_target(
-        image.get("url") or image.get("source_url") or image.get("image_url")
-    )
+    local_target, remote_target, _ = resolve_image_targets(image)
     label = _normalize_image_target(image.get("alt") or image.get("title") or "Image")
 
     if local_target:

@@ -17,7 +17,7 @@
 - 提取文章内容并生成 Obsidian 原生 Markdown 笔记
 - 在写入前执行重复检测，支持结构化决策结果（decision）
 - 生成标签、摘要、元数据和相关文章建议
-- 自动下载图片到 `assets/` 并保留可读引用
+- 自动下载图片到 `assets/` 并保留可读引用，支持 `src` / `data_src` / `data-original` / `data-lazy-src` / `srcset` / `url` / `image_url` / `original` 等常见字段
 - 支持多来源输入，包括公众号文章、小红书链接和普通网页
 - 按仓库标签契约校验标签（tags）
 
@@ -42,6 +42,20 @@ python scripts/find_related.py alpha beta --title "新标题" --json
 - 建立个人知识库体系
 - 团队知识沉淀
 - 学术资料归档
+
+## `draft.images` 示例
+
+```yaml
+images:
+  - path: /absolute/path/to/local.png
+    alt: Local image
+  - src: https://example.com/cover.png
+    alt: Remote image
+  - srcset: https://example.com/cover-1x.png 1x, https://example.com/cover-2x.png 2x
+    alt: Responsive image
+```
+
+`path` 用于本地文件，`src` / `data_src` / `data-original` / `data-lazy-src` / `original` 等用于远程图片；`srcset` 会优先选数值更高的候选。
 
 ## Skill
 

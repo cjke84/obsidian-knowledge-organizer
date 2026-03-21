@@ -19,7 +19,7 @@ This skill turns article links, drafts, and notes into structured Obsidian-ready
 ## Capabilities
 
 - Generate Obsidian-ready notes with YAML frontmatter, wikilinks, embeds, and block IDs
-- If `draft.images` is present, download images into `assets/` and keep relative references in the note body
+- If `draft.images` is present, download images into `assets/` and keep relative references in the note body; common fields like `src`, `data_src`, `data-original`, `data-lazy-src`, `srcset`, `url`, `image_url`, and `original` are supported
 - Run duplicate detection before writing, covering URL, hash, alias, and similarity checks
 - Treat duplicate hits as normal control flow; the CLI returns a structured decision result
 - Recommend directly linkable related notes
@@ -41,6 +41,20 @@ This skill turns article links, drafts, and notes into structured Obsidian-ready
 - Vault root must be a non-empty absolute path
 - Vault root should come from `OPENCLAW_KB_ROOT` when available
 - This contract covers frontmatter / wikilink / embed / block id rules
+
+## `draft.images` Example
+
+```yaml
+images:
+  - path: /absolute/path/to/local.png
+    alt: Local image
+  - src: https://example.com/cover.png
+    alt: Remote image
+  - srcset: https://example.com/cover-1x.png 1x, https://example.com/cover-2x.png 2x
+    alt: Responsive image
+```
+
+`path` is for local files. `src` / `data_src` / `data-original` / `data-lazy-src` / `original` etc. are used for remote images; `srcset` prefers the highest-value candidate.
 
 ## Compatibility
 

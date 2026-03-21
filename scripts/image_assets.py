@@ -4,16 +4,14 @@ import re
 import shutil
 import urllib.parse
 import urllib.request
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from .image_fields import resolve_image_targets
+
 
 _INVALID_FILENAME_CHARS = re.compile(r'[\\/:*?"<>|]')
-
-
-def normalize_one_line(text: str) -> str:
-    return re.sub(r"\s+", " ", (text or "")).strip()
 
 
 def sanitize_filename(title: str, *, max_len: int = 120) -> str:
@@ -36,43 +34,6 @@ def _escape_markdown_label(text: str) -> str:
         .replace("(", "\\(")
         .replace(")", "\\)")
     )
-
-
-def _looks_remote(target: str) -> bool:
-    return bool(re.match(r"^https?://", target, flags=re.IGNORECASE))
-
-
-def _stringify_target(value: Any) -> str:
-    return normalize_one_line(str(value or ""))
-
-
-def _source_url_from_image(image: Any) -> tuple[str, str, str]:
-    if isinstance(image, str):
-        target = _stringify_target(image)
-        if not target:
-            return "", "", "Image"
-        if _looks_remote(target):
-            return "", target, "Image"
-        return target, "", Path(target).stem or "Image"
-
-    if not isinstance(image, Mapping):
-        return "", "", "Image"
-
-    local_target = _stringify_target(
-        image.get("path")
-        or image.get("local_path")
-        or image.get("file")
-        or image.get("target")
-    )
-    remote_target = _stringify_target(
-        image.get("data_src")
-        or image.get("data-src")
-        or image.get("url")
-        or image.get("source_url")
-        or image.get("image_url")
-    )
-    label = _stringify_target(image.get("alt") or image.get("title") or Path(local_target or remote_target).stem)
-    return local_target, remote_target, label or "Image"
 
 
 def _unique_path(path: Path) -> Path:
@@ -100,7 +61,7 @@ def render_image_markdown(
     note_title: str,
     download_image: Callable[[str, Path], None] | None = None,
 ) -> str | None:
-    local_target, remote_target, label = _source_url_from_image(image)
+    local_target, remote_target, label = resolve_image_targets(image)
     vault_root = Path(vault_root)
     note_dir = sanitize_filename(note_title)
     asset_dir = vault_root / "assets" / note_dir

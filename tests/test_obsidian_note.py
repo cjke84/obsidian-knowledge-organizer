@@ -45,6 +45,94 @@ def test_render_image_markdown_downloads_remote_images_into_assets(tmp_path):
     assert expected_path.exists()
 
 
+def test_render_image_markdown_supports_common_remote_src_aliases(tmp_path):
+    from scripts import image_assets
+
+    rendered = image_assets.render_image_markdown(
+        {
+            "src": "https://example.com/hero.png",
+            "alt": "Hero Figure",
+        },
+        vault_root=tmp_path,
+        note_title="Image Note",
+        download_image=lambda url, destination: destination.write_bytes(url.encode("utf-8")),
+    )
+
+    expected_path = tmp_path / "assets" / "Image Note" / "hero.png"
+    assert rendered == "![Hero Figure](assets/Image Note/hero.png)"
+    assert expected_path.read_bytes() == b"https://example.com/hero.png"
+
+
+def test_render_image_markdown_supports_data_original_alias(tmp_path):
+    from scripts import image_assets
+
+    rendered = image_assets.render_image_markdown(
+        {
+            "data-original": "https://example.com/cover.png?download=1",
+            "alt": "Cover",
+        },
+        vault_root=tmp_path,
+        note_title="Image Note",
+        download_image=lambda url, destination: destination.write_bytes(url.encode("utf-8")),
+    )
+
+    expected_path = tmp_path / "assets" / "Image Note" / "cover.png"
+    assert rendered == "![Cover](assets/Image Note/cover.png)"
+    assert expected_path.read_bytes() == b"https://example.com/cover.png?download=1"
+
+
+def test_render_image_markdown_uses_best_srcset_candidate(tmp_path):
+    from scripts import image_assets
+
+    rendered = image_assets.render_image_markdown(
+        {
+            "srcset": "https://example.com/hero-1x.png 1x, https://example.com/hero-2x.png 2x",
+            "alt": "Hero",
+        },
+        vault_root=tmp_path,
+        note_title="Image Note",
+        download_image=lambda url, destination: destination.write_bytes(url.encode("utf-8")),
+    )
+
+    expected_path = tmp_path / "assets" / "Image Note" / "hero-2x.png"
+    assert rendered == "![Hero](assets/Image Note/hero-2x.png)"
+    assert expected_path.read_bytes() == b"https://example.com/hero-2x.png"
+
+
+def test_image_fields_resolve_common_aliases():
+    from scripts import image_fields
+
+    assert image_fields.resolve_image_targets(
+        {"src": "https://example.com/hero.png", "alt": "Hero"}
+    ) == ("", "https://example.com/hero.png", "Hero")
+    assert image_fields.resolve_image_targets(
+        {"data-original": "https://example.com/cover.png", "alt": "Cover"}
+    ) == ("", "https://example.com/cover.png", "Cover")
+    assert image_fields.resolve_image_targets(
+        {"srcset": "https://example.com/hero-1x.png 1x, https://example.com/hero-2x.png 2x"}
+    ) == ("", "https://example.com/hero-2x.png", "hero-2x")
+    assert image_fields.resolve_image_targets(
+        {"data-lazy-src": "https://example.com/lazy.png", "alt": "Lazy"}
+    ) == ("", "https://example.com/lazy.png", "Lazy")
+    assert image_fields.resolve_image_targets(
+        {"original": "https://example.com/original.png", "alt": "Original"}
+    ) == ("", "https://example.com/original.png", "Original")
+
+
+def test_image_fields_prefers_best_srcset_candidate():
+    from scripts import image_fields
+
+    assert image_fields.resolve_image_targets(
+        {
+            "srcset": (
+                "https://example.com/hero-1x.png 1x, "
+                "https://example.com/hero-2x.png 2x, "
+                "https://example.com/hero-800w.png 800w"
+            )
+        }
+    ) == ("", "https://example.com/hero-800w.png", "hero-800w")
+
+
 def test_render_image_markdown_falls_back_to_remote_reference_when_download_fails(tmp_path):
     from scripts import image_assets
 

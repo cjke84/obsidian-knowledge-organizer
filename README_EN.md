@@ -10,7 +10,7 @@ An Obsidian vault workflow skill that turns article links, drafts, and notes int
 - extract the article
 - check duplicates and return a structured decision
 - generate tags, summary, and metadata
-- download images into `assets/` and keep readable references
+- download images into `assets/` and keep readable references, including common fields like `src`, `data_src`, `data-original`, `data-lazy-src`, `srcset`, `url`, `image_url`, and `original`
 - render an Obsidian-ready note
 
 ## Capabilities
@@ -29,6 +29,20 @@ An Obsidian vault workflow skill that turns article links, drafts, and notes int
 - archive notes
 - generate summaries
 - suggest related notes
+
+## `draft.images` example
+
+```yaml
+images:
+  - path: /absolute/path/to/local.png
+    alt: Local image
+  - src: https://example.com/cover.png
+    alt: Remote image
+  - srcset: https://example.com/cover-1x.png 1x, https://example.com/cover-2x.png 2x
+    alt: Responsive image
+```
+
+`path` is for local files. `src` / `data_src` / `data-original` / `data-lazy-src` / `original` etc. are used for remote images; `srcset` prefers the highest-value candidate.
 
 ## Quick start
 
