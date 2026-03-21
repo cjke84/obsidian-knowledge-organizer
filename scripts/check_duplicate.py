@@ -18,7 +18,7 @@ try:
         similarity,
         strip_frontmatter,
     )
-except ModuleNotFoundError:  # Allow running the script directly.
+except (ImportError, ModuleNotFoundError):  # Allow running the script directly.
     from settings import DEFAULT_KB_PATH, resolve_vault_root
     from markdown_helpers import (
         load_frontmatter,
@@ -322,7 +322,8 @@ def main():
         else:
             print("✅ 未发现重复文章")
 
-    return 0 if decision["action"] == "create_new_version" else 1
+    # Duplicate detection is a normal control-flow result, not a tool failure.
+    return 0
 
 if __name__ == '__main__':
     sys.exit(main())

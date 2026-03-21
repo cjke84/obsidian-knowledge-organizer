@@ -97,3 +97,24 @@ def test_destination_path_sanitizes_title(tmp_path):
     assert rendered.destination_path.parent == tmp_path
     assert rendered.destination_path.suffix == ".md"
     assert rendered.destination_path.name == "Bad-Title- -Oops-.md"
+
+
+def test_render_note_preserves_images(tmp_path):
+    from scripts import obsidian_note
+
+    rendered = obsidian_note.render_obsidian_note(
+        {
+            "title": "Image Note",
+            "source_type": "web",
+            "source_url": "https://example.com/article",
+            "images": [
+                {"path": "images/local-figure.png", "alt": "Local figure"},
+                {"url": "https://example.com/image(1).png", "alt": "Remote figure"},
+            ],
+        },
+        vault_root=tmp_path,
+    )
+
+    assert "## Images" in rendered.content
+    assert "- ![[images/local-figure.png]]" in rendered.content
+    assert "- ![Remote figure](<https://example.com/image(1).png>)" in rendered.content

@@ -7,8 +7,9 @@ Send an article link to OpenClaw and say: `store it in the knowledge base`.
 
 This skill will:
 - extract the article
-- check duplicates
+- check duplicates and return a structured decision
 - generate tags and summary
+- preserve provided images in the rendered note
 - render an Obsidian-ready note
 
 ## What it is

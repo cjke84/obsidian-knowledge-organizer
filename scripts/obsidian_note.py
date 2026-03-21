@@ -48,6 +48,40 @@ def _escape_markdown_label(text: str) -> str:
     )
 
 
+def _normalize_image_target(value: Any) -> str:
+    return normalize_one_line(str(value or ""))
+
+
+def _render_image_reference(image: Any) -> str | None:
+    if isinstance(image, str):
+        target = _normalize_image_target(image)
+        if not target:
+            return None
+        if re.match(r"^https?://", target, flags=re.IGNORECASE):
+            return f"![Image](<{target}>)"
+        return embed(target)
+
+    if not isinstance(image, Mapping):
+        return None
+
+    local_target = _normalize_image_target(
+        image.get("path")
+        or image.get("local_path")
+        or image.get("file")
+        or image.get("target")
+    )
+    remote_target = _normalize_image_target(
+        image.get("url") or image.get("source_url") or image.get("image_url")
+    )
+    label = _normalize_image_target(image.get("alt") or image.get("title") or "Image")
+
+    if local_target:
+        return embed(local_target)
+    if remote_target:
+        return f"![{_escape_markdown_label(label)}](<{remote_target}>)"
+    return None
+
+
 _INVALID_FILENAME_CHARS = re.compile(r'[\\/:*?"<>|]')
 
 
@@ -141,6 +175,7 @@ def render_obsidian_note(draft: Mapping[str, Any], *, vault_root: str | Path) ->
     related_notes = _as_list(draft.get("related_notes"))
     embeds = set(_as_list(draft.get("embeds")))
     related_links = draft.get("related_links") or []
+    images = draft.get("images") or []
 
     body_lines: list[str] = []
     body_lines.append(f"# {title}")
@@ -198,6 +233,19 @@ def render_obsidian_note(draft: Mapping[str, Any], *, vault_root: str | Path) ->
         body_lines.append("## Related Links")
         body_lines.append("")
         body_lines.extend(rendered_links)
+        body_lines.append("")
+
+    rendered_images: list[str] = []
+    if isinstance(images, list):
+        for item in images:
+            rendered = _render_image_reference(item)
+            if rendered:
+                rendered_images.append(rendered)
+
+    if rendered_images:
+        body_lines.append("## Images")
+        body_lines.append("")
+        body_lines.extend(f"- {line}" for line in rendered_images)
         body_lines.append("")
 
     body_lines.append("## Source")

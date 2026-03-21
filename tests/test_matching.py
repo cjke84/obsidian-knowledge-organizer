@@ -1,5 +1,8 @@
 from scripts import check_duplicate as check_duplicate_module
 from scripts import find_related as find_related_module
+import json
+import subprocess
+import sys
 
 
 def _write_note(
@@ -116,3 +119,47 @@ def test_related_note_discovery_returns_wikilink_ready_titles(tmp_path):
     assert related, "Expected a related note"
     assert related[0]["title"] == "Alpha Article"
     assert related[0]["wikilink"] == "[[Alpha Article]]"
+
+
+def test_duplicate_cli_exits_successfully_for_duplicate_match(tmp_path):
+    vault = tmp_path / "vault"
+    vault.mkdir()
+    note = vault / "existing.md"
+    _write_note(
+        note,
+        title="Existing Note",
+        source_url="https://example.com/article",
+        canonical_hash="same-hash",
+        tags=["alpha"],
+        body="Shared body text.",
+    )
+
+    script = check_duplicate_module.__file__
+    result = subprocess.run(
+        [
+            sys.executable,
+            script,
+            "Incoming Note",
+            "--content",
+            """---
+title: Incoming Note
+source_url: https://example.com/article
+---
+
+# Incoming Note
+
+Different body entirely.
+""",
+            "--kb",
+            str(vault),
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    decision = json.loads(result.stdout)
+    assert decision["matches"], "Expected the CLI to return a structured duplicate decision"
+    assert decision["action"] in {"skip", "merge", "overwrite", "create_new_version"}
