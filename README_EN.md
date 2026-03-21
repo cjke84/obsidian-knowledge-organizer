@@ -3,18 +3,18 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fobsidian--knowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
 
-OpenClaw / Codex skill for Obsidian-native knowledge organization.
+OpenClaw- and Codex-compatible skill for Obsidian-native knowledge organization.
 
 ## What it is
 
 - Obsidian-ready note generator for vault workflows
 - Duplicate detection and related-note suggestions
-- Tag validation, summary shaping, and metadata output
+- Tag validation, summary generation, and metadata output
 
 ## What it does
 
 - Generates frontmatter, wikilinks, embeds, and block IDs
-- Detects duplicates with URL, hash, alias, and similarity checks
+- Detects duplicates with URL, hash, alias, and similarity-based checks
 - Recommends related notes with wikilink-friendly references
 - Validates tags against the vault contract before writing
 

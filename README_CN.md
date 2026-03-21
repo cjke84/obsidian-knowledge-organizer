@@ -3,13 +3,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fobsidian--knowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
 
-面向 Obsidian vault 工作流的知识整理 skill。
+OpenClaw 和 Codex 可用的 Obsidian 原生知识整理 skill。
 
 ## 是什么
 
-- 面向 vault 的 Obsidian 成品笔记生成器
+- 面向 vault 工作流的 Obsidian 成品笔记生成器
 - 支持去重检测与相关文章建议
-- 支持标签校验、摘要整理和元数据输出
+- 支持标签校验、摘要生成和元数据输出
 
 ## 做什么
 
