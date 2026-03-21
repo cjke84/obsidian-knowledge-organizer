@@ -1,5 +1,8 @@
 # obsidian-knowledge-organizer
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fobsidian--knowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
+
 Obsidian-native knowledge organizer / Obsidian 原生知识整理工具
 
 ## What it does / 功能
