@@ -7,7 +7,7 @@
 
 - [English README](README_EN.md)
 - [中文介绍](README_CN.md)
-- [Install Skill Prompt](PROMPT.md)
+- [Install Skill](INSTALL.md)
 
 ## Skill
 

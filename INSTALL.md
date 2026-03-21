@@ -1,4 +1,4 @@
-# Install Skill Prompt
+# Install Skill
 
 ```text
 Install cjke84/obsidian-knowledge-organizer as a usable skill.
