@@ -180,6 +180,29 @@ def _extract_remote_fields(response: dict[str, Any]) -> tuple[str | None, str | 
     return (str(doc_id) if doc_id is not None else None, None)
 
 
+def _raise_for_application_error(response: dict[str, Any]) -> None:
+    if not isinstance(response, dict):
+        return
+
+    code = response.get("code")
+    if code is None:
+        data = response.get("data")
+        if isinstance(data, dict):
+            code = data.get("code")
+    if code is None:
+        return
+
+    code_text = str(code).strip()
+    if code_text and code_text != "0":
+        message = response.get("msg") or response.get("message")
+        if message is None:
+            data = response.get("data")
+            if isinstance(data, dict):
+                message = data.get("msg") or data.get("message")
+        detail = f": {message}" if message else ""
+        raise RuntimeError(f"IMA import failed with API code {code_text}{detail}")
+
+
 def import_to_ima(
     draft: ImportDraft,
     config: ImaImportConfig,
@@ -188,6 +211,7 @@ def import_to_ima(
 ) -> ImaImportResult:
     payload = build_ima_payload(draft, folder_id=config.folder_id)
     response = (transport or _default_transport)(payload, config)
+    _raise_for_application_error(response)
     remote_id, remote_url = _extract_remote_fields(response)
     now = datetime.now(timezone.utc).isoformat()
     sync_record = SyncStateRecord(
@@ -207,4 +231,3 @@ def import_to_ima(
         remote_url=remote_url,
         sync_record=sync_record,
     )
-

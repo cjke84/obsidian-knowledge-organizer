@@ -75,6 +75,33 @@ def test_import_to_ima_returns_sync_record_from_transport():
     assert result.sync_record.remote_id == "doc_123"
 
 
+def test_import_to_ima_raises_on_application_error():
+    from scripts.ima_kb import ImaImportConfig, import_to_ima
+
+    draft = ImportDraft.from_mapping(
+        {
+            "title": "IMA Note",
+            "source_type": "markdown",
+            "source_path": "/vault/note.md",
+            "content": "Body text",
+        }
+    )
+
+    def fake_transport(payload, config):
+        return {"code": 100001, "msg": "参数错误"}
+
+    try:
+        import_to_ima(
+            draft,
+            ImaImportConfig(client_id="c", api_key="k", base_url="https://ima.qq.com/openapi/note/v1"),
+            transport=fake_transport,
+        )
+    except RuntimeError as exc:
+        assert "100001" in str(exc)
+    else:
+        raise AssertionError("Expected RuntimeError for application-level failure")
+
+
 def test_resolve_ima_config_reads_environment(monkeypatch):
     from scripts.ima_kb import resolve_ima_config
 
@@ -89,4 +116,3 @@ def test_resolve_ima_config_reads_environment(monkeypatch):
     assert config.api_key == "key_456"
     assert config.base_url == "https://ima.qq.com/openapi/note/v1"
     assert config.folder_id == "folder_abc"
-
