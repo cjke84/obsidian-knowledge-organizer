@@ -37,3 +37,26 @@ def test_import_draft_hashes_are_stable():
 
     assert one.source_id == two.source_id
     assert one.content_hash == two.content_hash
+
+
+def test_import_draft_uses_source_path_for_non_url_sources():
+    from scripts import ImportDraft
+
+    one = ImportDraft.from_mapping(
+        {
+            "title": "Shared Title",
+            "source_type": "markdown",
+            "source_path": "/vault/a.md",
+            "content": "same content",
+        }
+    )
+    two = ImportDraft.from_mapping(
+        {
+            "title": "Shared Title",
+            "source_type": "markdown",
+            "source_path": "/vault/b.md",
+            "content": "same content",
+        }
+    )
+
+    assert one.source_id != two.source_id

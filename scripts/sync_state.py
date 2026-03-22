@@ -51,7 +51,10 @@ class SyncStateStore:
     def _load_if_exists(self) -> None:
         if not self.path.exists():
             return
-        raw = json.loads(self.path.read_text(encoding="utf-8") or "{}")
+        try:
+            raw = json.loads(self.path.read_text(encoding="utf-8") or "{}")
+        except json.JSONDecodeError:
+            return
         records = raw.get("records") or {}
         if not isinstance(records, dict):
             return

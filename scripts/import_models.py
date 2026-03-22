@@ -58,6 +58,13 @@ class ImportDraft:
         title = _one_line(data.get("title") or "Untitled") or "Untitled"
         source_type = _one_line(data.get("source_type") or "unknown").lower() or "unknown"
         source_url = _one_line(data.get("source_url") or data.get("url") or "")
+        source_path = _one_line(
+            data.get("source_path")
+            or data.get("file_path")
+            or data.get("path")
+            or ""
+        )
+        explicit_source_id = _one_line(data.get("source_id") or "")
         content = str(
             data.get("content")
             or data.get("raw_content_markdown")
@@ -69,7 +76,7 @@ class ImportDraft:
         normalized_content = _normalize_content_for_hash(content)
         content_hash = sha256_hex(normalized_content)
 
-        source_id_basis = source_url or f"{source_type}\n{title}"
+        source_id_basis = explicit_source_id or source_url or source_path or f"{source_type}\n{title}"
         source_id = sha256_hex(source_id_basis)
 
         return cls(
