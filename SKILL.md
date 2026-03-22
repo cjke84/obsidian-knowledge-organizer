@@ -36,6 +36,12 @@ This skill turns article links, drafts, and notes into structured Markdown with 
 - Use `mode=once` for a single import run, or `mode=sync` to skip items whose content hash has not changed.
 - The shared sync orchestrator lives in `scripts/knowledge_sync.py`, and can be used with `--markdown-path`, `--folder-path`, or `--link`.
 
+## Usage Examples
+
+- Obsidian: `python3 -m scripts.knowledge_sync --destination obsidian --mode once --state .sync-state.json --vault-root /path/to/vault --markdown-path draft.md`
+- Feishu: `python3 -m scripts.knowledge_sync --destination feishu --mode once --state .sync-state.json --markdown-path draft.md`
+- Tencent IMA: `python3 -m scripts.knowledge_sync --destination ima --mode sync --state .sync-state.json --folder-path drafts/`
+
 ## Workflow
 
 1. Get content: use a browser for public-account links, prefer `xiaohongshu-mcp` for Xiaohongshu links, use `web_fetch` for other web pages, and process user-provided content directly
