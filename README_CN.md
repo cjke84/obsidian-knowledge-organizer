@@ -1,7 +1,7 @@
 # Knowledge Organizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fknowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
+[![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fknowledge--organizer-blue?logo=github)](https://github.com/cjke84/knowledge-organizer)
 
 一个面向知识库工作流的整理工具，用于把文章、链接和草稿整理成结构化、可直接落盘的笔记，也可以同步到飞书知识库和腾讯 IMA。
 
@@ -68,4 +68,4 @@ python scripts/find_related.py alpha beta --title "新标题" --json
 
 - [English README](README_EN.md)
 - [安装说明](INSTALL.md)
-- [GitHub 仓库](https://github.com/cjke84/obsidian-knowledge-organizer)
+- [GitHub 仓库](https://github.com/cjke84/knowledge-organizer)

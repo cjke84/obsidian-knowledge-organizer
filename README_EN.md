@@ -1,7 +1,7 @@
 # Knowledge Organizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fknowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
+[![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fknowledge--organizer-blue?logo=github)](https://github.com/cjke84/knowledge-organizer)
 
 A knowledge-base workflow skill that turns article links, drafts, and notes into structured Obsidian-ready Markdown with duplicate checks, tags, summaries, related-note suggestions, image downloads, and optional Feishu / IMA sync targets.
 
@@ -60,4 +60,4 @@ python scripts/find_related.py alpha beta --title "New Title" --json
 
 - [中文介绍](README_CN.md)
 - [Install Skill for Agent](INSTALL.md)
-- [GitHub Repository](https://github.com/cjke84/obsidian-knowledge-organizer)
+- [GitHub Repository](https://github.com/cjke84/knowledge-organizer)

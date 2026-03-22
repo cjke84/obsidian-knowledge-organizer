@@ -102,7 +102,7 @@ images:
 
 ## Project Links
 
-- GitHub repository: <https://github.com/cjke84/obsidian-knowledge-organizer>
+- GitHub repository: <https://github.com/cjke84/knowledge-organizer>
 
 ## Output Template
 
