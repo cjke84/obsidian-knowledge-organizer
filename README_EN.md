@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fobsidian--knowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
 
-An Obsidian vault workflow skill that turns article links, drafts, and notes into structured Obsidian-ready Markdown with duplicate checks, tags, summaries, related-note suggestions, and image downloads.
+An Obsidian vault workflow skill that turns article links, drafts, and notes into structured Obsidian-ready Markdown with duplicate checks, tags, summaries, related-note suggestions, image downloads, and optional Feishu / IMA sync targets.
 
 ## What it does
 
@@ -12,6 +12,9 @@ An Obsidian vault workflow skill that turns article links, drafts, and notes int
 - generate tags, summary, and metadata
 - download images into `assets/` and keep readable references, including common fields like `src`, `data_src`, `data-original`, `data-lazy-src`, `srcset`, `url`, `image_url`, and `original`
 - render an Obsidian-ready note
+- orchestrate `destination=obsidian|feishu|ima` and `mode=once|sync`
+- sync to Feishu through the official OpenClaw `openclaw-lark` plugin
+- sync to Tencent IMA through the direct `import_doc` OpenAPI flow
 
 ## Capabilities
 
@@ -20,6 +23,7 @@ An Obsidian vault workflow skill that turns article links, drafts, and notes int
 - Obsidian-ready note generator for vault workflows
 - validates tags against the repository tag contract
 - recommends directly linkable related notes
+- supports one-shot import and incremental sync into Obsidian, Feishu, or IMA
 
 ## Use cases
 

@@ -5,7 +5,7 @@ description: An OpenClaw- and Codex-compatible Obsidian knowledge organization s
 
 # Knowledge Organizer
 
-This skill turns article links, drafts, and notes into structured Obsidian-ready Markdown with duplicate checks, tags, summaries, related-note suggestions, and image downloads.
+This skill turns article links, drafts, and notes into structured Obsidian-ready Markdown with duplicate checks, tags, summaries, related-note suggestions, image downloads, and optional sync targets for Feishu and IMA.
 
 ## Use Cases
 
@@ -24,13 +24,18 @@ This skill turns article links, drafts, and notes into structured Obsidian-ready
 - Treat duplicate hits as normal control flow; the CLI returns a structured decision result
 - Recommend directly linkable related notes
 - Validate tags against the knowledge-base tag contract
+- Sync to Feishu through the official OpenClaw `openclaw-lark` plugin
+- Sync to Tencent IMA through the direct import_doc OpenAPI flow
+- Orchestrate `destination=obsidian|feishu|ima` with `mode=once|sync`
 
 ## Workflow
 
 1. Get content: use a browser for public-account links, prefer `xiaohongshu-mcp` for Xiaohongshu links, use `web_fetch` for other web pages, and process user-provided content directly
-2. Check duplicates before final write: prefer URL + title + similarity checks, and treat duplicate hits as normal control flow
-3. Render the note: `scripts/obsidian_note.py` generates the content and destination path
-4. Write to the vault: runtime writes directly to `destination_path` without a second Markdown pass
+2. Normalize the source: use `scripts/import_sources.py`, `scripts/import_normalizer.py`, and `scripts/import_models.py` to build a shared `ImportDraft`
+3. Check duplicates before final write: prefer URL + title + similarity checks, and treat duplicate hits as normal control flow
+4. Choose a destination: `scripts/knowledge_sync.py` dispatches to `obsidian`, `feishu`, or `ima`
+5. Render or import: `scripts/obsidian_note.py` generates the content and destination path, while `scripts/feishu_kb.py` and `scripts/ima_kb.py` build the sync payloads
+6. Write or sync: runtime writes directly to `destination_path` for Obsidian, or stores `SyncStateRecord` for Feishu/IMA
 
 For WeChat public-account imports, read `references/wechat-import.md` before doing browser extraction, image handling, or final write.
 
@@ -42,16 +47,20 @@ For WeChat public-account imports, read `references/wechat-import.md` before doi
 - Prefer reusing bundled scripts over hand-writing a parallel pipeline when the scripts already cover the task
 - For article imports, separate the pipeline into: fetch/normalize → duplicate-check → render → write, instead of mixing all steps together
 - Before running script-based import flows, prefer checking `scripts/check_runtime.py` to confirm Python and knowledge-base paths are available
+- For Feishu import, prefer the official OpenClaw `openclaw-lark` plugin (`feishu-create-doc` / `feishu-update-doc`) and use Lark Markdown with `<image url="..."/>` / `<file url="..." name="..."/>`
+- For IMA import, use the direct OpenAPI `import_doc` flow with `IMA_OPENAPI_CLIENTID` and `IMA_OPENAPI_APIKEY`
 
 ## Contract
 
 - Input: structured draft, title aliases, source metadata, summary, bullets, excerpts, images, related notes, and vault root
-- Output: `RenderedNote(content, destination_path)`
+- Output: `RenderedNote(content, destination_path)` for Obsidian, or a `SyncStateRecord`-backed import result for Feishu/IMA
 - Frontmatter must include `title`, `aliases`, `tags`, `source_type`, `source_url`, `published`, `created`, `updated`, `importance`, `status`, and `canonical_hash`
 - Before writing tags, require at least 1 domain tag and 1 type tag, with a total of 5-10 tags
 - Vault root must be a non-empty absolute path
 - Vault root should come from `OPENCLAW_KB_ROOT` when available
 - This contract covers frontmatter / wikilink / embed / block id rules
+- Feishu payloads use `title` + `markdown` + placement fields (`folder_token` / `wiki_node` / `wiki_space`)
+- IMA payloads use `content_format=1`, `content`, and optional `folder_id`
 
 ## WeChat Notes
 

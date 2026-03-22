@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-cjke84%2Fobsidian--knowledge--organizer-blue?logo=github)](https://github.com/cjke84/obsidian-knowledge-organizer)
 
-一个面向 Obsidian 知识库工作流的整理工具，用于把文章、链接和草稿整理成结构化、可直接落盘的笔记。
+一个面向 Obsidian 知识库工作流的整理工具，用于把文章、链接和草稿整理成结构化、可直接落盘的笔记，也可以同步到飞书知识库和腾讯 IMA。
 
 ## 它会做什么
 
@@ -13,6 +13,9 @@
 - 自动下载图片到 `assets/` 并保留可读引用，支持 `src` / `data_src` / `data-original` / `data-lazy-src` / `srcset` / `url` / `image_url` / `original` 等常见字段
 - 支持公众号文章、小红书链接和普通网页
 - 输出可直接写入 Obsidian 的笔记
+- 统一编排 `destination=obsidian|feishu|ima` 和 `mode=once|sync`
+- 飞书通过 OpenClaw 官方 `openclaw-lark` 插件接入
+- IMA 通过 `import_doc` OpenAPI 直连
 
 ## 能力概览
 
@@ -20,6 +23,14 @@
 - 面向 vault 工作流的成品笔记生成器
 - 按标签契约校验标签（tags）
 - 推荐可直接链接的相关文章
+
+## 使用方式
+
+1. 把文章链接或草稿交给 OpenClaw。
+2. 让它执行去重、标签生成和摘要整理。
+3. 选择目标：`obsidian`、`feishu` 或 `ima`。
+4. 选择模式：`once` 一次导入，或 `sync` 增量同步。
+5. 输出可直接写入 Obsidian 的 Markdown 笔记，或同步到飞书 / IMA。
 
 ## 适用场景
 
@@ -29,6 +40,7 @@
 - 归档
 - 生成摘要
 - 推荐相关文章
+- 需要把同一份内容同步到 Obsidian、飞书和 IMA
 
 ## `draft.images` 示例
 

@@ -20,6 +20,10 @@ def test_skill_contract_mentions_obsidian_frontmatter_wikilinks_and_embeds():
         "prefer `xiaohongshu-mcp` for Xiaohongshu links",
         "For WeChat public-account imports, read `references/wechat-import.md`",
         "Before running script-based import flows, prefer checking `scripts/check_runtime.py`",
+        "destination=obsidian|feishu|ima",
+        "mode=once|sync",
+        "openclaw-lark",
+        "import_doc OpenAPI",
     ]
     required_tag_phrases = [
         "至少 1 个领域标签 + 1 个类型标签",
