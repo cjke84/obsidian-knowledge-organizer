@@ -9,8 +9,11 @@
    - 不要把来源解析逻辑直接写进目标端适配器
 
 2. **再构造飞书负载**
-   - 目标端只负责把 `ImportDraft` 转成飞书可接受的结构
-   - 保留标题、正文、标签、来源、图片相关信息
+   - 目标端只负责把 `ImportDraft` 转成 `openclaw-lark` 插件可接受的结构
+   - 使用 `title` + `markdown`，并通过 `wiki_node` / `wiki_space` / `folder_token` 选择落点
+   - 图片和文件使用飞书插件支持的 Lark 标签：
+     - 图片：`<image url="..."/>`
+     - 文件：`<file url="..." name="..."/>`
 
 3. **最后做一次同步记录**
    - 成功后记录 `source_id`、`content_hash`、`remote_id`、`remote_url`
@@ -18,16 +21,15 @@
 
 ## 推荐环境变量
 
-- `FEISHU_IMPORT_ENDPOINT`
-  - 飞书知识库导入接口地址
-- `FEISHU_ACCESS_TOKEN`
-  - 如果接口需要 Bearer token
-- `FEISHU_APP_ID`
-  - 如果后续要补 OAuth / app auth
-- `FEISHU_APP_SECRET`
-  - 如果后续要补 OAuth / app auth
+- `FEISHU_FOLDER_TOKEN`
+  - 飞书文件夹 token
+- `FEISHU_WIKI_NODE`
+  - 飞书知识库节点 token
+- `FEISHU_WIKI_SPACE`
+  - 飞书知识空间 ID
 
 ## 备注
 
-- 第一版优先保留可配置传输层，不把接口写死在源代码里
-- 如果飞书官方插件的导入形态变化，只需要替换 transport 和 payload builder，不要重写来源层
+- 第一版优先对齐 `openclaw-lark` 的 `feishu-create-doc` / `feishu-update-doc` 插件形状，不再依赖自定义 HTTP import endpoint
+- 插件支持自动下载并上传公开 URL 的图片和文件，因此 markdown 中尽量保留可访问的 URL
+- 若后续要支持增量更新，可以把已有 `doc_id` 交给 `feishu-update-doc` 的 append / replace 模式
