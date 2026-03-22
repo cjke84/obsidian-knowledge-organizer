@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from . import feishu_kb, ima_kb, import_models, markdown_helpers, obsidian_note, settings, sync_state
 from .feishu_kb import FeishuImportConfig, FeishuImportResult, build_feishu_payload, import_to_feishu
-from .ima_kb import ImaImportConfig, ImaImportResult, build_ima_payload, import_to_ima
+from .ima_kb import ImaImportConfig, ImaImportResult, build_ima_payload, import_to_ima, resolve_ima_config
 from .import_models import ImportDraft, sha256_hex
 from .markdown_helpers import extract_title, load_frontmatter, scan_knowledge_base, similarity
 from .obsidian_note import RenderedNote, embed, render_obsidian_note, sanitize_filename, wikilink
@@ -36,6 +36,7 @@ __all__ = [
     "ImaImportResult",
     "build_ima_payload",
     "import_to_ima",
+    "resolve_ima_config",
     "SyncStateRecord",
     "SyncStateStore",
     "DEFAULT_KB_PATH",
