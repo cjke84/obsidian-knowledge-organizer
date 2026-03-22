@@ -70,7 +70,6 @@ git commit -m "feat: add shared import model and sync state"
 **Files:**
 - Create: `scripts/import_sources.py`
 - Create: `scripts/import_normalizer.py`
-- Modify: `scripts/check_runtime.py`
 - Test: `tests/test_import_sources.py`
 
 - [ ] **Step 1: Write the failing tests**
@@ -112,7 +111,7 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add scripts/import_sources.py scripts/import_normalizer.py scripts/check_runtime.py tests/test_import_sources.py
+git add scripts/import_sources.py scripts/import_normalizer.py tests/test_import_sources.py
 git commit -m "feat: normalize knowledge sync inputs"
 ```
 
@@ -147,7 +146,7 @@ Expected: FAIL because the adapter does not exist yet.
 
 Implement:
 - a Feishu-specific payload builder from `ImportDraft`
-- credential resolution through environment/config
+- credential resolution through `FEISHU_APP_ID` and `FEISHU_APP_SECRET`
 - a thin transport function for create/import calls
 - remote-id and remote-url capture for sync state
 
@@ -200,7 +199,7 @@ Expected: FAIL because the adapter does not exist yet.
 Implement:
 - a normalized IMA import plan from `ImportDraft`
 - a transport boundary for the official path
-- a fallback path that emits a portable import package when the API shape is not stable enough to call directly
+- a fallback ZIP export bundle with `manifest.json`, `content.md`, and `assets/` for manual import when the API shape is not stable enough to call directly
 - remote-id / sync-state capture when available
 
 Do not hard-code undocumented endpoints. Keep the public API surface small so the adapter can be adjusted after validation against the official plugin flow.
@@ -305,6 +304,7 @@ Update:
 - the README files to explain the new destinations and sync modes
 - the install guide if any new env vars or setup steps are introduced
 - the skill contract test so it checks the new platform coverage
+- pin the env vars in the docs as `FEISHU_APP_ID`, `FEISHU_APP_SECRET`, and `IMA_API_KEY`
 
 - [ ] **Step 4: Run the full test suite and verify it passes**
 
